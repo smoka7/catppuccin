@@ -15,7 +15,12 @@ local function inspect(t)
 	return fmt([[{ %s }]], table.concat(list, ", "))
 end
 
-function M.compile(flavour)
+function M.compile(flavour, opt)
+	local cfg = require("catppuccin.config")
+	if opt then
+		cfg.set_options(opt)
+	end
+	local config = cfg.options
 	local theme = require("catppuccin.lib.mapper").apply(flavour)
 	local lines = {
 		[[
@@ -28,7 +33,6 @@ if vim.fn.exists("syntax_on") then
 end
 vim.g.colors_name = "catppuccin"]],
 	}
-	local config = require("catppuccin.config").options
 	if is_windows then
 		config.compile.path = config.compile.path:gsub("/", "\\")
 	end
